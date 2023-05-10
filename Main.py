@@ -4,28 +4,24 @@ import json
 import tiktoken
 #import spatial.distance.cosine
 from scipy import spatial
-import SimpleUDPClient from python-osc
+import time
 
 # Set your secret API key
 openai.api_key = "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"
 
 ## OSC test
-ip = "127.0.0.1"
+"""ip = "127.0.0.1"
 port = 5005
 
-client = SimpleUDPClient(ip, port)  # Create client
-# for this you need to install python-osc
-# via pip install python-osc
-# then import SimpleUDPClient from python-osc
+client = SimpleUDPClient(ip, port)  
 
-client.send_message("Velocity", 123)   # Send float message
-# Send message with int, float and string
+client.send_message("Velocity", 123)  
 velocities = [1, 2., 127, 80, 90]
 pitches = [60, 62, 64, 65, 67, 69, 71, 72]
 durations = [1, 1, 1, 1, 1, 1, 1, 1]
 client.send_message("Velocities", velocities)
 client.send_message("/some/address", ["adDingens"])
-client.send_message("/some/bonk", ["bonkDingen"])
+client.send_message("/some/bonk", ["bonkDingen"])"""
 
 
 
@@ -89,14 +85,23 @@ def send_message_to_chatgpt(message_input, role=None, model="gpt-3.5-turbo", tem
 
     final_message = message_intro + message_input if include_beginning else message_input
 
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=final_message,
-        temperature=temperature,
-    )
+    while True:
+        try:
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=final_message,
+                temperature=temperature,
+            )
 
-    response_content = response.choices[0].message.content
+            response_content = response.choices[0].message.content
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Retrying...")
+            time.sleep(10)
+                    
     return response_content
+
 
 def get_melody_sounddesign_deicision(prompt):
     message_melody_sounddesign_decision = [
@@ -209,14 +214,17 @@ def main():
         return response_prompt_enhancer
 
     response_add_edit = get_decision_add_edit(user_input)
+    print("\n Decision Add Edit: \n")
     print(response_add_edit + "\n")
 
     response_prompt_enhancer_main = prompt_enhancer(user_input,mode="")
+    print("\n Prompt Enhancer Main: \n")
     print(response_prompt_enhancer_main + "\n")
 
     if "add" in response_add_edit:
         #### musical
         response_prompt_enhancer_melody = prompt_enhancer(response_prompt_enhancer_main,mode="melody")
+        print("\n Prompt Enhancer Melody: \n")
         print(response_prompt_enhancer_melody + "\n")
         
         def get_melody(prompt):
@@ -228,26 +236,22 @@ def main():
             
             response_melody = send_message_to_chatgpt(message_melody, role="user", model="gpt-3.5-turbo", temperature=1.3, include_beginning=True, is_list=True)
             return response_melody
-        
-        """ def get_melody_with_intermediate_step(prompt):
-            
-            message_intermediate_step = [                    
-                {"role": "user", "content": f"'{response_prompt_enhancer_melody}'. Create MIDI files that match the description of the melody. Use the MIDIUtil Python library and only respond with a list of tuples, where each tuple represents a single note in the format (pitch, velocity, duration). The pitch is an integer value between 0 and 127, representing the note's frequency according to the MIDI standard. The velocity is an integer value between 0 and 127, representing the note's intensity or loudness, with higher values indicating a louder note. The duration is a positive integer representing the length of the note in beats. Please provide a full melody using this format: melody = [(PITCH_1, VELOCITY_1, DURATION_1), (PITCH_2, VELOCITY_2, DURATION_2), (PITCH_3, VELOCITY_3, DURATION_3), ...]. Replace the placeholders (PITCH_n, VELOCITY_n, DURATION_n) with appropriate integer values for your melody."},
-                ]
-            
-            response_melody = send_message_to_chatgpt(message_melody, role="user", model="gpt-4", temperature=0.1, include_beginning=True, is_list=True)
-            return response_melody"""
-
+    
         response_melody = get_melody(response_prompt_enhancer_main)
         #response_melody = get_melody_with_intermediate_step(response_prompt_enhancer_main)
-
+        print("\n Melody: \n")
         print(response_melody)
 
         #### sound design
         response_prompt_enhancer_sounddesign = prompt_enhancer(response_prompt_enhancer_main,mode="sounddesign")
+        
+        print("\n Prompt Enhancer Sound Design: \n")
+        print(response_prompt_enhancer_sounddesign + "\n")
+
+
         def get_parameter_adsr(prompt):
             message_parameter_values = [
-                {f"Given the following parameter ranges for an ADSR (Attack, Decay, Sustain, Release) envelope in a synthesizer:\n\nAttack (A): 1-1000 ms\nDecay (D): 1-1000 ms\nSustain (S): 0-1 (proportional volume)\nRelease (R): 1-5000 ms\nPlease analyze the following user description and suggest suitable parameter values for the ADSR envelope that best capture the sonic properties described. Carefully consider the user's requirements and try to translate them into the ADSR envelope parameters.\n\nUser description: {prompt}\n\nPlease provide your parameter value suggestions for the Attack (A), Decay (D), Sustain (S), and Release (R) stages, by thinking how they correspond to the sonic properties specified by the user.\n\nYour response should follow this specific output format, suitable for easy extraction with Python:\n\njson\nCopy code\n{\n  \"Attack\": <value_A>,\n  \"Decay\": <value_D>,\n  \"Sustain\": <value_S>,\n  \"Release\": <value_R>\n}\nPlease note that the LLM should strictly adhere to the provided output format, and only include the suggested parameter values in its response, without any additional commentary or explanation."}
+                {"role": "user", "content": f"Given the following parameter ranges for an ADSR (Attack, Decay, Sustain, Release) envelope in a synthesizer:\n\nAttack (A): 1-1000 ms\nDecay (D): 1-1000 ms\nSustain (S): 0-1 (proportional volume)\nRelease (R): 1-5000 ms\nPlease analyze the following user description and suggest suitable parameter values for the ADSR envelope that best capture the sonic properties described. Carefully consider the user's requirements and try to translate them into the ADSR envelope parameters.\n\nUser description: {prompt}\n\nPlease provide your parameter value suggestions for the Attack (A), Decay (D), Sustain (S), and Release (R) stages, by thinking how they correspond to the sonic properties specified by the user.\n\nYour response should follow this specific output format, suitable for easy extraction with Python:\n\n  [\"Attack\": <value_A>,\n  \"Decay\": <value_D>,\n  \"Sustain\": <value_S>,\n  \"Release\": <value_R>]\n\nPlease note that the LLM should strictly adhere to the provided output format, and only include the suggested parameter values in its response, without any additional commentary or explanation."}
             ]
                 
             
