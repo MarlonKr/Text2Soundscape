@@ -1,7 +1,7 @@
 # Text2Soundscape
 # Composer and Sound Designer Assistant
 
-This repository contains an implementation of a Composer and Sound Designer Assistant, powered by OpenAI's ChatGPT. The tool helps users create or edit music and soundscapes based on their given prompts. It interacts with OpenAI's GPT-3.5-turbo model to provide meaningful, detailed, and creative suggestions according to user's requirements for melodies or sound designs.
+This repository houses an ongoing project - a Composer and Sound Designer Assistant, empowered by OpenAI's ChatGPT. This interactive tool is engineered to aid users in the creation or alteration of music and soundscapes, taking cues from user-provided prompts. The core of this application lies in its interaction with OpenAI's GPT model, which interprets user requirements and generates appropriate parameter values. These parameters are then utilized to control a Max MSP synth patch, crafting unique melodies or sound designs
 
 ## Table of Contents
 
@@ -47,11 +47,12 @@ python main.py
 
 The Composer and Sound Designer Assistant consists of three main components:
 
-1. Component 1: Determine if the user's prompt should create or modify a new sound, or provide further instructions for an existing sound.
+1. Component 1: Determine if the user's prompt should create a new sound, or provide further instructions for an existing sound.
 2. Component 2: Enhance the user's prompt with additional sound-describing adjectives.
 3. Component 3: Identify the best parameters and values to match the user's descriptions (for both melodies and sound design).
 
 The application takes input from the user, processes the prompt, and then interacts with the GPT-3.5-turbo model to provide the desired output.
+
 
 ## Usage
 
