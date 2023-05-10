@@ -7,7 +7,7 @@ from scipy import spatial
 import time
 
 # Set your secret API key
-openai.api_key = "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"
+openai.api_key = ""
 
 ## OSC test
 """ip = "127.0.0.1"
