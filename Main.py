@@ -154,16 +154,24 @@ def main():
         return response_add_edit
 
     def prompt_enhancer (prompt,mode):
-        if mode == "sound design":
-            mode_description = "sound design"
+        if mode == "sounddesign":
+            message_prompt_enhancer = [
+                {"role": "user", "content": "Describe a synth patch that that should sound like: 'feeling of a warm, sunny afternoon.'"},
+                {"role": "assistant", "content": "To recreate the feeling of a warm, sunny afternoon in a synth patch, we'd focus on generating a bright, uplifting tone with a touch of warmth. This could be achieved by using sawtooth waveforms for their rich, full-bodied sound. The filter cutoff frequency should be set relatively high to allow for a bright timbre, but not overly so, ensuring that the sound isn't harsh. For the 'warmth,' a touch of gentle tube or tape saturation could be applied, and subtle modulation to pitch and filter cutoff via an LFO could be used to emulate the subtle, lazy fluctuations of a summer day. A touch of reverb with a longer decay time could provide a sense of openness and space, mimicking the expansiveness of an outdoor setting."},
+                
+                {"role": "user", "content": "Create a sound design description for a synth patch that should sound like: 'a cold, desolate winter night.'"},
+                {"role": "assistant", "content": "To emulate the cold, desolate nature of a winter night, a synth patch would employ sparse, icy textures. The choice of waveform would likely be a sine or triangle for their clear, simple tones. The filter would be set to a lower cutoff frequency, with a small amount of resonance to create a chilly, cutting sound. Modulation effects like phase shifting or flanging could be used subtly to create a sense of movement and desolation. A longer attack time would be used to give the patch a slow, evolving feel. Lastly, a generous amount of spacious reverb and a bit of delay could evoke the vast, lonely echo of a winter's night."},
+                
+                {"role": "user", "content": f"Create a sound design description for a synth patch that should sound like: '{prompt}'"},
+            ]
+
         elif mode == "melody":
             message_prompt_enhancer = [
-                {"role": "user", "content": f"Create a meaningful, detailed and creative description for a fictional melody described with the words: 'Sad, melancholic melody, muted instrumental tones with a low BPM, conveying a somber atmosphere and steady rhythm'. Only provide a music-theoretical description about how the melody would be written"},
+                {"role": "user", "content": f"Create a meaningful, detailed and creative description for a fictional melody described with the words: 'Sad, melancholic melody, muted instrumental tones, slow, conveying a somber atmosphere and steady rhythm'. Only provide a music-theoretical description about how the melody would be written"},
                 {"role": "assistant", "content": f"The sad and melancholic melody would likely be composed in a minor key, with long sustained notes and subtle chromatic inflections that create a feeling of emotional tension and unease. The melody would likely be characterized by a slow tempo, with a low BPM, which allows for ample space between each note, creating a somber atmosphere. he melody would be arranged in a way that emphasizes the muted quality of the instrumentation, with gentle dynamics that never rise too high or too low."},
                 {"role": "user", "content": f"Create a meaningful, detailed and creative description for a fictional melody described with the words: '{prompt}'"},
                 ]
             
-            response_prompt_enhancer = send_message_to_chatgpt(message_prompt_enhancer, role="user", model="gpt-4", temperature=1, include_beginning=True, is_list=True)
         else:
 
             message_prompt_enhancer = [
@@ -174,7 +182,7 @@ def main():
                 {"role": "user", "content": f"Enhance this prompt: {prompt}"},
                 ]
         
-            response_prompt_enhancer = send_message_to_chatgpt(message_prompt_enhancer, role="user", model="gpt-4", temperature=1, include_beginning=True, is_list=True)
+        response_prompt_enhancer = send_message_to_chatgpt(message_prompt_enhancer, role="user", model="gpt-4", temperature=1, include_beginning=True, is_list=True)
         pass
 
         return response_prompt_enhancer
@@ -186,7 +194,7 @@ def main():
     print(response_prompt_enhancer_main + "\n")
 
     if "add" in response_add_edit:
-        
+        #### musical
         response_prompt_enhancer_melody = prompt_enhancer(response_prompt_enhancer_main,mode="melody")
         print(response_prompt_enhancer_melody + "\n")
         
@@ -214,17 +222,21 @@ def main():
 
         print(response_melody)
 
-        def get_parameter_values(prompt):
+        #### sound design
+        response_prompt_enhancer_sounddesign = prompt_enhancer(response_prompt_enhancer_main,mode="sounddesign")
+        def get_parameter_adsr(prompt):
             message_parameter_values = [
-                {"role": "user", "content": f"Create a meaningful, detailed and creative description for a fictional melody described with the words: '{prompt}'"},
-                {"role": "assistant", "content": f"Sad, melancholic melody, muted instrumental tones with a low BPM, conveying a somber atmosphere and steady rhythm"},
-                {"role": "user", "content": f"Create a meaningful, detailed and creative description for a fictional melody described with the words: '{prompt}'"},
-                ]
+                {f"Given the following parameter ranges for an ADSR (Attack, Decay, Sustain, Release) envelope in a synthesizer:\n\nAttack (A): 1-1000 ms\nDecay (D): 1-1000 ms\nSustain (S): 0-1 (proportional volume)\nRelease (R): 1-5000 ms\nPlease analyze the following user description and suggest suitable parameter values for the ADSR envelope that best capture the sonic properties described. Carefully consider the user's requirements and try to translate them into the ADSR envelope parameters.\n\nUser description: {prompt}\n\nPlease provide your parameter value suggestions for the Attack (A), Decay (D), Sustain (S), and Release (R) stages, by thinking how they correspond to the sonic properties specified by the user.\n\nYour response should follow this specific output format, suitable for easy extraction with Python:\n\njson\nCopy code\n{\n  \"Attack\": <value_A>,\n  \"Decay\": <value_D>,\n  \"Sustain\": <value_S>,\n  \"Release\": <value_R>\n}\nPlease note that the LLM should strictly adhere to the provided output format, and only include the suggested parameter values in its response, without any additional commentary or explanation."}
+            ]
+                
             
-            response_parameter_values = send_message_to_chatgpt(message_parameter_values, role="user", model="gpt-4-turbo", temperature=1, include_beginning=True, is_list=True)
+            response_parameter_values = send_message_to_chatgpt(message_parameter_values, role="user", model="gpt-3.5-turbo", temperature=1, include_beginning=True, is_list=True)
             return response_parameter_values
         
-        response_parameter_values = get_parameter_values(response_prompt_enhancer_main)
+        #def get_parameters(prompt):
+
+        response_parameter_values = get_parameter_adsr(response_prompt_enhancer_sounddesign)
+        print("ADSR envelope parameter values: \n")
         print(response_parameter_values + "\n")
 
         pass
