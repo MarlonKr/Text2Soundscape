@@ -255,14 +255,28 @@ def main():
             ]
                 
             
-            response_parameter_values = send_message_to_chatgpt(message_parameter_values, role="user", model="gpt-3.5-turbo", temperature=1, include_beginning=True, is_list=True)
+            response_parameter_values = send_message_to_chatgpt(message_parameter_values, role="user", model="gpt-4", temperature=1, include_beginning=True, is_list=True)
             return response_parameter_values
         
+        def get_parameter_filter(prompt):
+            message_parameter_values = [
+                {"role": "user", "content": f"\"Given the following parameter ranges for a Filter (Filter-Type, Filter-Frequency, Quality, Gainfactor, Filterenvelope) in a synthesizer:\n\nFilter-Type: 1: Lowpass, 2: Highpass, 3: Bandpass, 4: Bandstop, 5: Peaknotch, 6: Lowshelf, 7: Highshelf\n\nFilter-Frequency: 20-20000Hz\n\nQuality: 0,2-5\n\nGainfactor: 0,125-8\n\nFilter Envelope: (-1)-1\n\nPlease analyze the following user description and suggest a suitable filtertype with suitable parameter values for the filter that best capture the sonic properties described. Carefully consider the user's requirements and try to translate them into the filter parameters.\n\nUser description: {prompt}\n\nPlease provide your parameter value suggestions for Filter-Type, Filter-Frequency, Quality, Gainfactor, Filterenvelope, by thinking how they correspond to the sonic properties specified by the user.\n\nYour response should follow this specific output format, suitable for easy extraction with Python:\n\nCopy code\n\n\n\n\\\"Type\\\": <value_Type>,\n\n\\\"Frequency\\\": <value_Frequency>,\n\n\\\"Quality\\\": <value_Quality>,\n\n\\\"Gain\\\": <value_Gain>,\n\n\\\"Envelope\\\": <value_Envelpoe>\n\n\n\nPlease note that the LLM should strictly adhere to the provided output format, and only include the suggested parameter values in its response, without any additional commentary or explanation."  }
+
+            ]
+                
+            
+            response_parameter_values = send_message_to_chatgpt(message_parameter_values, role="user", model="gpt-4", temperature=1, include_beginning=True, is_list=True)
+            return response_parameter_values
+
+
         #def get_parameters(prompt):
 
-        response_parameter_values = get_parameter_adsr(response_prompt_enhancer_sounddesign)
+        response_parameter_ADSR = get_parameter_adsr(response_prompt_enhancer_sounddesign)
         print("ADSR envelope parameter values: \n")
-        print(response_parameter_values + "\n")
+        print(response_parameter_ADSR + "\n")
+        response_parameter_Filter = get_parameter_filter(response_prompt_enhancer_sounddesign)
+        print("Filter parameter values: \n")
+        print(response_parameter_Filter + "\n")
 
         pass
     elif "edit" in response_add_edit:
