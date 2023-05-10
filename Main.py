@@ -4,9 +4,30 @@ import json
 import tiktoken
 #import spatial.distance.cosine
 from scipy import spatial
+import SimpleUDPClient from python-osc
 
 # Set your secret API key
 openai.api_key = "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"
+
+## OSC test
+ip = "127.0.0.1"
+port = 5005
+
+client = SimpleUDPClient(ip, port)  # Create client
+# for this you need to install python-osc
+# via pip install python-osc
+# then import SimpleUDPClient from python-osc
+
+client.send_message("Velocity", 123)   # Send float message
+# Send message with int, float and string
+velocities = [1, 2., 127, 80, 90]
+pitches = [60, 62, 64, 65, 67, 69, 71, 72]
+durations = [1, 1, 1, 1, 1, 1, 1, 1]
+client.send_message("Velocities", velocities)
+client.send_message("/some/address", ["adDingens"])
+client.send_message("/some/bonk", ["bonkDingen"])
+
+
 
 # functions
 def cosine_similarity_embeddings(embedding1, embedding2):
@@ -182,7 +203,7 @@ def main():
                 {"role": "user", "content": f"Enhance this prompt: {prompt}"},
                 ]
         
-        response_prompt_enhancer = send_message_to_chatgpt(message_prompt_enhancer, role="user", model="gpt-4", temperature=1, include_beginning=True, is_list=True)
+        response_prompt_enhancer = send_message_to_chatgpt(message_prompt_enhancer, role="user", model="gpt-3.5-turbo", temperature=1, include_beginning=True, is_list=True)
         pass
 
         return response_prompt_enhancer
@@ -205,7 +226,7 @@ def main():
                 ]
             
             
-            response_melody = send_message_to_chatgpt(message_melody, role="user", model="gpt-4", temperature=1.3, include_beginning=True, is_list=True)
+            response_melody = send_message_to_chatgpt(message_melody, role="user", model="gpt-3.5-turbo", temperature=1.3, include_beginning=True, is_list=True)
             return response_melody
         
         """ def get_melody_with_intermediate_step(prompt):
