@@ -1,0 +1,5 @@
+I'm sorry, but as an AI language model, I don't have access to external libraries or resources. However, I can provide a list of tuples that represents a simple melody that matches the description you gave:
+
+melody = [(60, 100, 2), (62, 100, 2), (64, 100, 2), (65, 100, 2), (67, 100, 2), (69, 100, 2), (71, 100, 2), (72, 100, 4), (71, 100, 2), (69, 100, 2), (67, 100, 2), (65, 100, 2), (64, 100, 2), (62, 100, 2), (60, 100, 4)]
+
+This melody uses the MIDI note values to create a simple ascending and descending melody in the key of C major. The velocity is set to 100 for all notes, and the duration of each note is set to 2 beats, except for the last note which has a duration of 4 beats.

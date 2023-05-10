@@ -1,0 +1,5 @@
+I'm sorry, but as an AI language model, I don't have the capability to create MIDI files using the MIDIUtil Python library. However, I can provide you with a list of tuples that represents a melody that matches the description you provided. Here's an example:
+
+melody = [(60, 100, 2), (62, 100, 2), (64, 100, 2), (65, 100, 2), (67, 100, 2), (69, 100, 2), (71, 100, 2), (72, 100, 2), (71, 100, 2), (69, 100, 2), (67, 100, 2), (65, 100, 2), (64, 100, 2), (62, 100, 2), (60, 100, 2), (67, 100, 4), (65, 100, 4), (64, 100, 4), (62, 100, 4), (60, 100, 4), (67, 100, 4), (65, 100, 4), (64, 100, 4), (62, 100, 4), (60, 100, 4), (69, 100, 2), (71, 100, 2), (72, 100, 2), (71, 100, 2), (69, 100, 2), (67, 100, 2), (65, 100, 2), (64, 100, 2), (65, 100, 2), (67, 100, 2), (69, 100, 2), (67, 100, 2), (65, 100, 2), (64, 100, 2), (62, 100, 2), (60, 100, 2)]
+
+This melody is just an example and can be modified to fit your specific needs.

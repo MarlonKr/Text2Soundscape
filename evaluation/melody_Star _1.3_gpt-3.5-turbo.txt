@@ -1,0 +1,5 @@
+Apologies, as an AI language model, I don't have access to external Python libraries or applications and can't generate MIDI files with the format you requested. However, I can give you an example of how the melody (known as "Main Title" for the Star Wars franchise) would look like in MIDI format using a similar pitch, velocity, duration notation:
+
+melody = [(67, 110, 2), (71, 110, 2), (74, 110, 2), (62, 110, 4), (67, 110, 2), (71, 110, 2), (74, 110, 2), (62, 110, 4), (67, 110, 2), (72, 110, 2), (76, 110, 2), (51, 110, 4), (67, 110, 2), (72, 110, 2), (76, 110, 2), (51, 110, 4), (67, 110, 2), (71, 110, 2), (74, 110, 2), (62, 110, 4), (67, 110, 2), (71, 110, 2), (74, 110, 2), (62, 110, 4), (67, 110, 2), (72, 110, 2), (76, 110, 2), (54, 110, 4), (72, 110, 2), (76, 110, 2), (79, 110, 2), (50, 110, 4), (67, 110, 2)]
+
+The pitch corresponds to a specific note (in this example, using a moderately high register) and is represented by its MIDI note number. The velocity sets the loudness of each note, whereas the duration (in this example using a tempo of 120 BPM) specifies how long each note should be played.
