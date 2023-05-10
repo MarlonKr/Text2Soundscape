@@ -73,9 +73,9 @@ Describe the music or soundscape you want to hear:
     - Decision Add Edit
     - Prompt Enhancer Main
     - Prompt Enhancer Melody (if "add" decision selected)
-    - Melody
+    - Melody output
     - Prompt Enhancer Sound Design (if "add" decision selected)
-    - ADSR envelope parameter values
+    - synth patch parameter values output
 
 ## Examples
 
